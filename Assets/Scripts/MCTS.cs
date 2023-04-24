@@ -11,8 +11,20 @@ public class MCTS
 
     public int Search(GameModel root, int iterations)
     {
-        int move = 0;
-        while (!root.ValidMove(move)) move++;
+        if (!nodeScores.ContainsKey(root.ToString())){
+            nodeScores.Add(root.ToString(), Tuple.Create<int, int>(1, 1));
+        }
+        int iteration = 0;
+        int move = -1;
+        while (iteration < iterations)
+        {
+            Stack<GameModel> path = Traverse(root);
+            GameModel leaf = path.Peek();
+            bool didRedWin = Rollout(leaf);
+            move = Backpropagate(path, didRedWin);
+            iteration++;
+            TotalIterations++;
+        }
         return move;
     }
 
@@ -156,7 +168,14 @@ public class MCTS
 
     private double GetScore(GameModel parent, GameModel child)
     {
-        return -1;
+        Tuple<int, int> parentScore = nodeScores[parent.ToString()];
+        Tuple<int, int> childScore = nodeScores[child.ToString()];
+
+        double winRatio = childScore.Item1 / childScore.Item2;
+        double visitRatio = Math.Log(parentScore.Item2) / childScore.Item2;
+        double k = Math.Sqrt(2);
+
+        return winRatio + k * Math.Sqrt(visitRatio);
     }
 
     public string GetStats()
