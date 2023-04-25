@@ -352,7 +352,7 @@ MonoBehaviour:
   redToken: {fileID: 3350530040873030026, guid: 716ab784da798a349a4b4bfef161a25d, type: 3}
   yellowToken: {fileID: 3350530040873030026, guid: ceaa1452dabc4b840bbea8cea21d6d24, type: 3}
   tokens: {fileID: 1182622387}
-  human: 1
+  human: 0
   maxTrainPerFrame: 100
   maxTrainThreshold: 3000000
 --- !u!1 &8164078560079513891 stripped

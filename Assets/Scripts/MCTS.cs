@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public class MCTS
 {
@@ -11,11 +12,11 @@ public class MCTS
 
     public int Search(GameModel root, int iterations)
     {
-        if (!nodeScores.ContainsKey(root.ToString())){
-            nodeScores.Add(root.ToString(), Tuple.Create<int, int>(1, 1));
+        if (!nodeScores.ContainsKey(root.GetState())){
+            nodeScores.Add(root.GetState(), Tuple.Create<int, int>(1, 1));
         }
         int iteration = 0;
-        int move = -1;
+        int move = 0;
         while (iteration < iterations)
         {
             Stack<GameModel> path = Traverse(root);
@@ -168,8 +169,8 @@ public class MCTS
 
     private double GetScore(GameModel parent, GameModel child)
     {
-        Tuple<int, int> parentScore = nodeScores[parent.ToString()];
-        Tuple<int, int> childScore = nodeScores[child.ToString()];
+        Tuple<int, int> parentScore = nodeScores[parent.GetState()];
+        Tuple<int, int> childScore = nodeScores[child.GetState()];
 
         double winRatio = childScore.Item1 / childScore.Item2;
         double visitRatio = Math.Log(parentScore.Item2) / childScore.Item2;
